@@ -28,8 +28,6 @@ export const renderImages = (images, currentPage) => {
     gallery.insertAdjacentHTML('beforeend', markup);
   }
 
-  const lightbox = new SimpleLightbox('.gallery-link', {
-    /* options */
-  });
+  const lightbox = new SimpleLightbox('.gallery-link', {});
   lightbox.refresh();
 };

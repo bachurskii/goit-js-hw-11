@@ -12,7 +12,6 @@ export async function fetchImages(searchQuery, pageNumber) {
     const { data } = response;
 
     if (data.hits.length === 0) {
-      // Если результаты поиска пусты, выполните соответствующие действия
       gallery.innerHTML = '';
       showError(
         'Sorry, there are no images matching your search query. Please try again.'

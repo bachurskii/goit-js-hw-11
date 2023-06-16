@@ -15,14 +15,14 @@ searchForm.addEventListener('submit', async e => {
 
   currentPage = 1;
   clearGallery();
-  hideLoadMoreBtn(); // Скрываем кнопку "Load more" перед началом поиска
+  hideLoadMoreBtn();
 
   try {
     const images = await fetchImages(searchQuery, currentPage);
     renderImages(images, currentPage);
 
     if (images.length > 0) {
-      showLoadMoreBtn(); // Показываем кнопку "Load more" после отрисовки изображений
+      showLoadMoreBtn();
     } else {
       showError(
         'Sorry, there are no images matching your search query. Please try again.'
