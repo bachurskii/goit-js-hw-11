@@ -5,18 +5,6 @@ import { renderImages } from './js/markup';
 
 let currentPage = 1;
 
-const clearGallery = () => {
-  gallery.innerHTML = '';
-};
-
-const showLoadMoreBtn = () => {
-  loadMoreBtn.removeAttribute('hidden');
-};
-
-const hideLoadMoreBtn = () => {
-  loadMoreBtn.setAttribute('hidden', 'true');
-};
-
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
   const searchQuery = e.target.elements.searchQuery.value.trim();
@@ -62,3 +50,15 @@ loadMoreBtn.addEventListener('click', async () => {
     showError('Oops! Something went wrong. Please try again later.');
   }
 });
+
+const clearGallery = () => {
+  gallery.innerHTML = '';
+};
+
+const showLoadMoreBtn = () => {
+  loadMoreBtn.removeAttribute('hidden');
+};
+
+const hideLoadMoreBtn = () => {
+  loadMoreBtn.setAttribute('hidden', 'true');
+};
