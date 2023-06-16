@@ -4,18 +4,17 @@ import { showError } from './js/error';
 import { renderImages } from './js/markup';
 
 let currentPage = 1;
+let searchQuery = '';
 
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
-  const searchQuery = e.target.elements.searchQuery.value.trim();
+  searchQuery = e.target.elements.searchQuery.value.trim();
 
   if (searchQuery === '') {
     return;
   }
 
   currentPage = 1;
-  clearGallery();
-  hideLoadMoreBtn();
 
   try {
     const images = await fetchImages(searchQuery, currentPage);
@@ -33,17 +32,17 @@ searchForm.addEventListener('submit', async e => {
     showError('Oops! Something went wrong. Please try again later.');
   }
 });
-loadMoreBtn.addEventListener('click', async () => {
-  currentPage += 1;
-  const searchQuery = searchForm.elements.searchQuery.value.trim();
 
+loadMoreBtn.addEventListener('click', async () => {
   try {
-    const images = await fetchImages(searchQuery, currentPage);
-    renderImages(images, currentPage);
+    const images = await fetchImages(searchQuery, currentPage + 1);
+    renderImages(images, currentPage + 1);
 
     if (images.length === 0) {
       hideLoadMoreBtn();
       showError("We're sorry, but you've reached the end of search results.");
+    } else {
+      currentPage += 1;
     }
   } catch (error) {
     console.error(error);
@@ -56,9 +55,12 @@ const clearGallery = () => {
 };
 
 const showLoadMoreBtn = () => {
-  loadMoreBtn.removeAttribute('hidden');
+  loadMoreBtn.style.display = 'block';
 };
 
 const hideLoadMoreBtn = () => {
-  loadMoreBtn.setAttribute('hidden', 'true');
+  loadMoreBtn.style.display = 'none';
 };
+clearGallery();
+hideLoadMoreBtn();
+hideLoadMoreBtn();
