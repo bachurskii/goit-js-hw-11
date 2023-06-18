@@ -11,28 +11,27 @@ export async function fetchImages(searchQuery, pageNumber) {
 
     const { data } = response;
 
-    if (data.hits.length === 0) {
-      gallery.innerHTML = '';
-      showError(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-      return [];
+    if (data.total === 0) {
+      return { images: [], totalHits: 0 };
     }
 
-    const images = data.hits.map(image => ({
-      webformatURL: image.webformatURL,
-      largeImageURL: image.largeImageURL,
-      tags: image.tags,
-      likes: image.likes,
-      views: image.views,
-      comments: image.comments,
-      downloads: image.downloads,
-    }));
+    const images = processData(data.hits);
 
-    return images;
+    return { images, totalHits: data.total };
   } catch (error) {
     console.error(error);
-    showError('Oops! Something went wrong. Please try again later.');
     throw error;
   }
+}
+
+function processData(hits) {
+  return hits.map(image => ({
+    webformatURL: image.webformatURL,
+    largeImageURL: image.largeImageURL,
+    tags: image.tags,
+    likes: image.likes,
+    views: image.views,
+    comments: image.comments,
+    downloads: image.downloads,
+  }));
 }

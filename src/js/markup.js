@@ -27,7 +27,4 @@ export const renderImages = (images, currentPage) => {
   } else {
     gallery.insertAdjacentHTML('beforeend', markup);
   }
-
-  const lightbox = new SimpleLightbox('.gallery-link', {});
-  lightbox.refresh();
 };

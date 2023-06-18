@@ -1,10 +1,13 @@
 import { fetchImages } from './js/api';
 import { searchForm, gallery, loadMoreBtn } from './js/refs';
 import { showError } from './js/error';
+import { showSuccess } from './js/success';
 import { renderImages } from './js/markup';
 
 let currentPage = 1;
 let searchQuery = '';
+let totalPages = 0;
+const lightbox = new SimpleLightbox('.gallery-link', {});
 
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
@@ -17,32 +20,39 @@ searchForm.addEventListener('submit', async e => {
   currentPage = 1;
 
   try {
-    const images = await fetchImages(searchQuery, currentPage);
+    const { images, totalHits } = await fetchImages(searchQuery, currentPage);
+    totalPages = Math.ceil(totalHits / 40);
     renderImages(images, currentPage);
-
+    lightbox.refresh();
     if (images.length > 0) {
+      showSuccess(`Hooray! We found ${totalHits} images.`);
       showLoadMoreBtn();
     } else {
+      clearGallery();
       showError(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+      hideLoadMoreBtn();
     }
   } catch (error) {
     console.error(error);
     showError('Oops! Something went wrong. Please try again later.');
+    hideLoadMoreBtn();
   }
 });
 
 loadMoreBtn.addEventListener('click', async () => {
   try {
-    const images = await fetchImages(searchQuery, currentPage + 1);
+    const { images, totalHits } = await fetchImages(
+      searchQuery,
+      currentPage + 1
+    );
     renderImages(images, currentPage + 1);
-
-    if (images.length === 0) {
+    lightbox.refresh();
+    currentPage += 1;
+    if (currentPage === totalPages) {
       hideLoadMoreBtn();
       showError("We're sorry, but you've reached the end of search results.");
-    } else {
-      currentPage += 1;
     }
   } catch (error) {
     console.error(error);
@@ -61,6 +71,5 @@ const showLoadMoreBtn = () => {
 const hideLoadMoreBtn = () => {
   loadMoreBtn.style.display = 'none';
 };
-clearGallery();
-hideLoadMoreBtn();
+
 hideLoadMoreBtn();
